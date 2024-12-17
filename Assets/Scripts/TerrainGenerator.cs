@@ -20,8 +20,12 @@ public class TerrainGenerator : MonoBehaviour
 
     private Terrain terrain;
 
+    private Vector2 perlinOffset;
+
     void Awake()
     {
+        GeneratePerlinSeed();
+
         terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
 
@@ -29,8 +33,13 @@ public class TerrainGenerator : MonoBehaviour
         AddGeneratedObjects(generatedCaves);
     }
 
-    void Update()
+    void GeneratePerlinSeed()
     {
+        float offsetX = Random.Range(0f, 1000f);
+        float offsetY = Random.Range(0f, 1000f);
+        perlinOffset = new Vector2(offsetX, offsetY);
+
+        Debug.Log($"Perlin Noise Seed: {perlinOffset}");
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -56,8 +65,8 @@ public class TerrainGenerator : MonoBehaviour
 
     float CalculateHeight(int i, int j)
     {
-        float xCoord = (float)i / width * scale;
-        float yCoord = (float)j / height * scale;
+        float xCoord = (float)i / width * scale + perlinOffset.x;
+        float yCoord = (float)j / height * scale + perlinOffset.y;
 
         float totalHeight = 0;
         float frequency = 1f;
@@ -97,7 +106,6 @@ public class TerrainGenerator : MonoBehaviour
             generatedCaves.Add(caveEntrance);
         }
     }
-
 
     void AddGeneratedObjects(IEnumerable<GameObject> objects)
     {

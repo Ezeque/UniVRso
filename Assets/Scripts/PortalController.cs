@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PortalController : MonoBehaviour
 {
-    public DungeonGenerator dungeonGenerator;  // Referência ao dungeonGenerator
+    public DungeonGenerator dungeonGenerator; 
     private TeleportPointController teleportPoint;
     private bool hasEntered = false;
-    public bool canEnterCave;            // Indica se o jogador pode entrar na caverna
+    public bool canEnterCave;          
     public Vector3 cavePosition;
     public GameObject dungeonObj;
 

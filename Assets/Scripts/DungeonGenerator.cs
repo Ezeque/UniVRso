@@ -4,17 +4,19 @@ using System.Collections.Generic;
 public class DungeonGenerator : MonoBehaviour
 {
     [SerializeField]
-    private GameObject[] roomPrefabs; 
+    private GameObject[] roomPrefabs;
     [SerializeField]
-    private GameObject finalRoomPrefab; 
+    private GameObject finalRoomPrefab;
 
-    public int roomAmount = 10;   
-    public Vector2Int gridSize = new Vector2Int(100, 100); 
+    public int roomAmount = 10;
+    public Vector2Int gridSize = new Vector2Int(100, 100);
 
     public GameObject player;
+    public int TotalObjectAmount;
+    public int currentObjectAmount = 0;
 
     [SerializeField]
-    private Material caveSkybox; 
+    private Material caveSkybox;
 
     [SerializeField]
     private Material normalSkybox;
@@ -37,23 +39,32 @@ public class DungeonGenerator : MonoBehaviour
 
     void GenerateDungeon(GameObject dungeon)
     {
-        int roomsLeft = roomAmount - 2; 
+        int roomsLeft = roomAmount - 2;
         Room previousRoom = startRoom;
         Transform parent = dungeon.transform;
+        Stack<Room> roomStack = new Stack<Room>(); // Pilha para permitir backtracking
 
         while (roomsLeft > 0)
-        {   
+        {
             Vector2Int randomDirection = directions[Random.Range(0, directions.Length)];
             Vector2Int potentialLocation = previousRoom.coordinates + randomDirection;
 
             if (!rooms.ContainsKey(potentialLocation))
             {
+                // Criar uma nova sala
                 GameObject randomPrefab = roomPrefabs[Random.Range(0, roomPrefabs.Length)];
                 GameObject newRoomObj = Instantiate(randomPrefab, new Vector3(
                     potentialLocation.x * gridSize.x,
                     0,
                     potentialLocation.y * gridSize.y
                 ), Quaternion.identity);
+
+                bool shouldCreateObj = Random.Range(0, 5) == 0;
+                if ((TotalObjectAmount > currentObjectAmount && shouldCreateObj) || roomsLeft == 0)
+                {
+                    newRoomObj.GetComponent<Room>().SpawnObject(newRoomObj);
+                    currentObjectAmount++;
+                }
 
                 Room newRoom = newRoomObj.GetComponent<Room>();
                 newRoom.coordinates = potentialLocation;
@@ -63,12 +74,18 @@ public class DungeonGenerator : MonoBehaviour
 
                 previousRoom = newRoom;
                 roomsLeft--;
+                roomStack.Push(newRoom);
                 newRoomObj.transform.SetParent(parent);
+            }
+            else if (roomStack.Count > 0)
+            {
+                previousRoom = roomStack.Pop();
             }
         }
 
         PlaceFinalRoom(previousRoom);
     }
+
 
     void PlaceFinalRoom(Room previousRoom)
     {
@@ -133,7 +150,7 @@ public class DungeonGenerator : MonoBehaviour
         startRoomObj.transform.Find("SpawnPoint").name = "InitialSpawnPoint";
         startRoom = startRoomObj.GetComponent<Room>();
         startRoom.coordinates = startCoordinates;
-        if(rooms.Count > 0) rooms.Clear();
+        if (rooms.Count > 0) rooms.Clear();
         rooms.Add(startCoordinates, startRoom);
         Debug.Log("Passou do rooms.Add()");
         startRoomObj.transform.SetParent(parent);
@@ -168,7 +185,7 @@ public class DungeonGenerator : MonoBehaviour
         if (caveSkybox != null)
         {
             RenderSettings.skybox = caveSkybox;
-            DynamicGI.UpdateEnvironment(); 
+            DynamicGI.UpdateEnvironment();
         }
 
         GameObject.Find("NarrationTrigger").GetComponent<NarrationTriggerController>().normalSkybox = normalSkybox;

@@ -66,7 +66,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8e1db38237476c4bb2375a680350d2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cavePosition: {x: 0, y: 0, z: 0}
   canEnterCave: 1
+  caveMusic: {fileID: 8300000, guid: 52ddc49455104f847975eb23f06467e2, type: 3}
 --- !u!1 &3112116387269665131
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,6 +139,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonGenerator: {fileID: 0}
   canEnterCave: 0
+  cavePosition: {x: 0, y: 0, z: 0}
+  dungeonObj: {fileID: 0}
 --- !u!1001 &3158616728171692634
 PrefabInstance:
   m_ObjectHideFlags: 0

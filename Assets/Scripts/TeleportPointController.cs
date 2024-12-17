@@ -10,6 +10,7 @@ public class TeleportPointController : MonoBehaviour
         private DungeonGenerator dungeonGenerator;
         public Vector3 cavePosition;
         public bool canEnterCave = true;
+        public AudioClip caveMusic;
         void Start()
         {
             canEnterCave = true;
@@ -25,6 +26,8 @@ public class TeleportPointController : MonoBehaviour
             if (collider.tag == "Player" && canEnterCave){
                 dungeonGenerator.EnterCave(cavePosition);
                 canEnterCave = false;
+                GameObject.Find("SoundController").GetComponent<AudioSource>().clip = caveMusic;
+                GameObject.Find("SoundController").GetComponent<AudioSource>().Play();
             }
         }
 

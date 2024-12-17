@@ -108,7 +108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 256
   height: 256
-  depth: 20
+  depth: 10
   scale: 10
   octaves: 4
   persistence: 0.5
@@ -135,4 +135,7 @@ MonoBehaviour:
   roomAmount: 10
   gridSize: {x: 100, y: 100}
   player: {fileID: 0}
+  TotalObjectAmount: 0
+  currentObjectAmount: 0
   caveSkybox: {fileID: 0}
+  normalSkybox: {fileID: 0}

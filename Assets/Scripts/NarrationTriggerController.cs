@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class NarrationTriggerController : MonoBehaviour
     public VideoPlayer videoPlayer;
     public GameObject environmentController;
     public Material normalSkybox;
+    public Boolean canPlayVideo = false;
+    public AudioClip grassAmbience;
 
     private CutsceneIncrementer cutsceneIncrementer;
     private GameObject dungeon;
@@ -25,7 +28,7 @@ public class NarrationTriggerController : MonoBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Player")
+        if (collider.gameObject.tag == "Player" && canPlayVideo)
         {
             videoPlayer.loopPointReached += OnVideoPlayerStopped;
             
@@ -35,6 +38,7 @@ public class NarrationTriggerController : MonoBehaviour
             dungeon.SetActive(false);
             if (videoPlayer != null)
             {
+                GameObject.Find("SoundController").GetComponent<AudioSource>().Stop();
                 videoPlayer.Play(); 
             }
         }
@@ -42,11 +46,11 @@ public class NarrationTriggerController : MonoBehaviour
 
     void OnVideoPlayerStopped(VideoPlayer vp)
     {
+        Debug.Log("Chegou no onVideoPlayerStopped");
         videoPlayer.loopPointReached -= OnVideoPlayerStopped;
 
         if (environmentController != null)
         {
-            Debug.Log("Tem EnvironmentController");
             environmentController.SetActive(true);
         }
 
@@ -66,7 +70,7 @@ public class NarrationTriggerController : MonoBehaviour
             RenderSettings.skybox = normalSkybox;
             DynamicGI.UpdateEnvironment(); 
 
-            GameObject selectedTerrain = terrains[Random.Range(0, terrains.Length)];
+            GameObject selectedTerrain = terrains[UnityEngine.Random.Range(0, terrains.Length)];
 
             GameObject player = GameObject.FindGameObjectWithTag("Player");
             if (player != null)
@@ -95,6 +99,10 @@ public class NarrationTriggerController : MonoBehaviour
         else
         {
         }
+        
+        transform.parent.gameObject.SetActive(false);
+        GameObject.Find("SoundController").GetComponent<AudioSource>().clip = grassAmbience;
+        GameObject.Find("SoundController").GetComponent<AudioSource>().Play();
     }
 
     void OnDestroy()

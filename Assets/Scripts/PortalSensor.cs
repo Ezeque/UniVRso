@@ -22,7 +22,7 @@ public class PortalSensor : MonoBehaviour
             return;
         }
 
-        GameObject[] portals = GameObject.FindGameObjectsWithTag("Portal");
+        GameObject[] portals = GameObject.FindGameObjectsWithTag("Item");
 
         bool portalDetected = false;
 
