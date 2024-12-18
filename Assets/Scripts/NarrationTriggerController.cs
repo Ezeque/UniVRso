@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using UnityEngine.Video;
 
 public class NarrationTriggerController : MonoBehaviour
@@ -103,6 +104,9 @@ public class NarrationTriggerController : MonoBehaviour
         transform.parent.gameObject.SetActive(false);
         GameObject.Find("SoundController").GetComponent<AudioSource>().clip = grassAmbience;
         GameObject.Find("SoundController").GetComponent<AudioSource>().Play();
+        if(cutsceneIncrementer.cutsceneCounter == 3){
+            GameObject.Find("CutsceneFinal").GetComponent<PlayableDirector>().Play();
+        }
     }
 
     void OnDestroy()

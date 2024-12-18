@@ -59,7 +59,7 @@ public class DungeonGenerator : MonoBehaviour
                     potentialLocation.y * gridSize.y
                 ), Quaternion.identity);
 
-                bool shouldCreateObj = Random.Range(0, 5) == 0;
+                bool shouldCreateObj = Random.Range(0, 10) == 0;
                 if ((TotalObjectAmount > currentObjectAmount && shouldCreateObj) || roomsLeft == 0)
                 {
                     newRoomObj.GetComponent<Room>().SpawnObject(newRoomObj);

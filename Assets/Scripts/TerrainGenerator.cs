@@ -65,8 +65,8 @@ public class TerrainGenerator : MonoBehaviour
 
     float CalculateHeight(int i, int j)
     {
-        float xCoord = (float)i / width * scale + perlinOffset.x;
-        float yCoord = (float)j / height * scale + perlinOffset.y;
+        float xCoord = (float)i / width * scale;
+        float yCoord = (float)j / height * scale;
 
         float totalHeight = 0;
         float frequency = 1f;
