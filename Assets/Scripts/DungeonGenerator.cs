@@ -113,29 +113,36 @@ public class DungeonGenerator : MonoBehaviour
 
     void ConnectRooms(Room roomA, Room roomB)
     {
+        if (roomA == null || roomB == null)
+        {
+            Debug.LogError("One of the rooms is null in ConnectRooms.");
+            return;
+        }
+
         Vector2Int direction = roomB.coordinates - roomA.coordinates;
 
         if (direction == Vector2Int.up)
         {
-            Destroy(roomA.transform.Find("TopWall").gameObject);
-            Destroy(roomB.transform.Find("BottomWall").gameObject);
+            Destroy(roomA.transform.Find("TopWall")?.gameObject);
+            Destroy(roomB.transform.Find("BottomWall")?.gameObject);
         }
         else if (direction == Vector2Int.down)
         {
-            Destroy(roomA.transform.Find("BottomWall").gameObject);
-            Destroy(roomB.transform.Find("TopWall").gameObject);
+            Destroy(roomA.transform.Find("BottomWall")?.gameObject);
+            Destroy(roomB.transform.Find("TopWall")?.gameObject);
         }
         else if (direction == Vector2Int.left)
         {
-            Destroy(roomA.transform.Find("LeftWall").gameObject);
-            Destroy(roomB.transform.Find("RightWall").gameObject);
+            Destroy(roomA.transform.Find("LeftWall")?.gameObject);
+            Destroy(roomB.transform.Find("RightWall")?.gameObject);
         }
         else if (direction == Vector2Int.right)
         {
-            Destroy(roomA.transform.Find("RightWall").gameObject);
-            Destroy(roomB.transform.Find("LeftWall").gameObject);
+            Destroy(roomA.transform.Find("RightWall")?.gameObject);
+            Destroy(roomB.transform.Find("LeftWall")?.gameObject);
         }
     }
+
 
     public GameObject StartCaveCreation()
     {
@@ -152,7 +159,6 @@ public class DungeonGenerator : MonoBehaviour
         startRoom.coordinates = startCoordinates;
         if (rooms.Count > 0) rooms.Clear();
         rooms.Add(startCoordinates, startRoom);
-        Debug.Log("Passou do rooms.Add()");
         startRoomObj.transform.SetParent(parent);
 
         RemoveWallsFromStartRoom(startRoomObj);

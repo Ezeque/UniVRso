@@ -23,7 +23,6 @@ public class Room : MonoBehaviour
         spawnedObject.transform.parent = parent.transform;
         GameObject ObjSpawnPosition = parent.transform.Find("SpawnPoint").gameObject;
         spawnedObject.transform.position = ObjSpawnPosition.transform.position;
-        Debug.Log("Instanciou o objeto");
 
         Rigidbody rb = spawnedObject.GetComponent<Rigidbody>();
         if (rb == null)

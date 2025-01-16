@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PortalController : MonoBehaviour
 {
-    public DungeonGenerator dungeonGenerator; 
+    public DungeonGenerator dungeonGenerator;
     private TeleportPointController teleportPoint;
     private bool hasEntered = false;
     public bool canEnterCave;          
@@ -22,32 +22,59 @@ public class PortalController : MonoBehaviour
 
     void SetupCave()
     {
-        dungeonObj = dungeonGenerator.StartCaveCreation();
-        cavePosition = dungeonObj.transform.Find("InitialSpawnPoint").gameObject.transform.position;
+        if (!dungeonObj)
+        {
+            dungeonObj = dungeonGenerator.StartCaveCreation();
+        }
+        else
+        {
+            dungeonObj.SetActive(true);
+        }
+
+        cavePosition = dungeonObj.transform.GetChild(0).Find("InitialSpawnPoint").gameObject.transform.position;
         teleportPoint.cavePosition = cavePosition;
     }
 
     void Update()
     {
+        if (dungeonObj && hasEntered)
+        {
+            float distanceToPlayer = Vector3.Distance(transform.position, teleportPoint.transform.position);
 
+            if (distanceToPlayer > 10f && dungeonObj.activeSelf) 
+            {
+                dungeonObj.SetActive(false);
+            }
+        }
     }
 
     void OnTriggerEnter(Collider collider)
     {
-        if (collider.gameObject.tag == "Player" && !hasEntered && !dungeonObj)
+        if (collider.gameObject.tag == "Player" && !hasEntered)
         {
             hasEntered = true;
             teleportPoint.canEnterCave = true;
-            SetupCave();  
+
+            if (dungeonObj && !dungeonObj.activeSelf)
+            {
+                dungeonObj.SetActive(true); 
+            }
+            else if (!dungeonObj)
+            {
+                SetupCave(); 
+            }
         }
     }
 
     void OnTriggerExit(Collider collider)
     {
+        Debug.Log("Chegou ao onTriggerExit");
         if (collider.gameObject.tag == "Player")
         {
             hasEntered = false;
             canEnterCave = false;
+            dungeonObj = GameObject.Find("Dungeon").gameObject;
+            dungeonObj.SetActive(false); 
         }
     }
 

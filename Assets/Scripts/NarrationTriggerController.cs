@@ -35,7 +35,6 @@ public class NarrationTriggerController : MonoBehaviour
             
             videoPlayer.clip = cutsceneIncrementer.videoClips[cutsceneIncrementer.cutsceneCounter];
             dungeon = GameObject.Find("Dungeon");
-            Debug.Log("Dungeon Atual: " + dungeon);
             dungeon.SetActive(false);
             if (videoPlayer != null)
             {
@@ -47,7 +46,6 @@ public class NarrationTriggerController : MonoBehaviour
 
     void OnVideoPlayerStopped(VideoPlayer vp)
     {
-        Debug.Log("Chegou no onVideoPlayerStopped");
         videoPlayer.loopPointReached -= OnVideoPlayerStopped;
 
         if (environmentController != null)
